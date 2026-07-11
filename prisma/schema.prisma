@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  email     String   @unique
+  firstName String?
+  lastName  String?
+  imageUrl  String?
+  expenses  Expense[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  color     String    // Hex color for charts (e.g., #8B5CF6)
+  icon      String    // Icon identifier
+  expenses  Expense[]
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+model Expense {
+  id          String          @id @default(cuid())
+  amount      Float
+  description String
+  date        DateTime
+  type        TransactionType @default(EXPENSE)
+  
+  categoryId  String?
+  category    Category?       @relation(fields: [categoryId], references: [id])
+  
+  userId      String
+  user        User            @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
+  
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([userId])
+}
