@@ -8,7 +8,7 @@ export async function generateAiInsights(data: any) {
     throw new Error("GEMINI_API_KEY is not set");
   }
 
-  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+  const model = genAI.getGenerativeModel({ model: "gemini-3.1-flash-lite" });
 
   const prompt = `
     You are a financial advisor AI inside an expense tracking app.
